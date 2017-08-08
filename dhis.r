@@ -1,22 +1,35 @@
 # Set the working directory
-setwd("/home/sjtg/data-science-r/")
+setwd("Direcorty")
 
 #Read data from a csv file
 dhis <- read.table(
-           file = "/home/sjtg/data-science-r/Latrines in use.csv",
+           file = "Latrines in use pre-calc.csv",
            header = TRUE,
            sep = ",",
            stringsAsFactors = FALSE)
 
 head(dhis)
 
-#Calculating the harvest of the total 
-dhis$Harvest <- dhis$Initial.Latrines + dhis$Current.Latrines
+#Calculating the Baseline 
+dhis$Baseline <- dhis$Initial.Latrines / dhis$Initial.Household * dhis$Initial.Population 
+head(dhis$Baseline)
 head(dhis$Harvest)
 
 
+#Calculating the Harvest of the total 
+dhis$Harvest <- dhis$Current.Latrines - dhis$Current.Latrines / dhis$Current.HouseHold * dhis$Current.Population
+
+
+#Baseline
+plot(dhis$Baseline)
+pie(table(dhis$Baseline))
+hist(dhis$Baseline)
+
+#Harvest 
 plot(dhis$Harvest)
 pie(table(dhis$Harvest))
 hist(dhis$Harvest)
 
-write.csv(dhis, "/home/sjtg/data-science-r/dhis.csv")
+
+#export the file as csv 
+write.csv(dhis, "dhis.csv")
